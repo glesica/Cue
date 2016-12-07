@@ -1,32 +1,31 @@
 package cue;
 
 public class LinkedCue<T> implements Cue<T> {
-    QueueNode<T> firstNode;
-    QueueNode<T> lastNode;
+    QueueNode firstNode;
+    QueueNode lastNode;
 
     @Override
     public void enqueue(T item) {
-        QueueNode<T> newNode = new QueueNode<>(item);
-        if (lastNode == null) {
+        QueueNode newNode = new QueueNode(item);
+        if (isEmpty()) {
             lastNode = newNode;
             firstNode = lastNode;
             return;
         }
-        newNode.prev = lastNode;
         lastNode.next = newNode;
         lastNode = newNode;
     }
 
     @Override
     public T dequeue() {
-        if (firstNode == null) {
+        if (isEmpty()) {
             throw new EmptyQueueException();
         }
-        QueueNode<T> nextNode = firstNode;
-        firstNode = nextNode.next;
-        if (lastNode == nextNode) {
+        if (firstNode == lastNode) {
             lastNode = null;
         }
+        QueueNode nextNode = firstNode;
+        firstNode = firstNode.next;
         return nextNode.item;
     }
 
@@ -35,10 +34,9 @@ public class LinkedCue<T> implements Cue<T> {
         return firstNode == null;
     }
 
-    private class QueueNode<T> {
+    private class QueueNode {
         T item;
-        QueueNode<T> next;
-        QueueNode<T> prev;
+        QueueNode next;
 
         QueueNode(T item) {
             this.item = item;
